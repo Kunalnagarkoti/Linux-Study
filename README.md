@@ -1,4 +1,224 @@
-# Linux-Study
+# Linux-User Management and User Permission
+Here are the **most commonly asked User Management commands and interview questions** along with their answers:
+
+---
+
+## **1. Basic Commands and Questions**
+
+### **Q1: How do you add a new user in Linux?**  
+**Answer:**
+```bash
+sudo useradd -m -s /bin/bash username
+sudo passwd username
+```
+- `-m`: Creates a home directory.  
+- `-s`: Sets the default shell.  
+- Sets a password for the user.  
+
+---
+
+### **Q2: How do you delete a user along with their home directory?**  
+**Answer:**
+```bash
+sudo userdel -r username
+```
+- `-r`: Removes the home directory and mail spool.
+
+---
+
+### **Q3: How do you modify a user’s information?**  
+**Answer:**
+```bash
+sudo usermod -l newname oldname    # Rename user
+sudo usermod -d /new/home username # Change home directory
+sudo usermod -s /bin/zsh username  # Change shell
+sudo usermod -aG sudo username     # Add user to a group
+```
+
+---
+
+### **Q4: How do you lock and unlock a user account?**  
+**Answer:**
+```bash
+sudo passwd -l username   # Lock the user
+sudo passwd -u username   # Unlock the user
+```
+- Locks the account by adding a `!` in `/etc/shadow`.
+
+---
+
+### **Q5: How do you check user details?**  
+**Answer:**
+```bash
+id username        # Shows UID, GID, and groups
+finger username    # Displays user info (if installed)
+getent passwd username  # Reads /etc/passwd for details
+```
+
+---
+
+## **2. Group Management Questions**
+
+### **Q6: How do you create and delete groups in Linux?**  
+**Answer:**
+```bash
+sudo groupadd groupname     # Create a group
+sudo groupdel groupname     # Delete a group
+```
+
+---
+
+### **Q7: How do you add a user to multiple groups?**  
+**Answer:**
+```bash
+sudo usermod -aG group1,group2 username
+```
+- `-a`: Appends groups.  
+- `-G`: Adds the user to multiple groups.  
+
+---
+
+### **Q8: How do you check which groups a user belongs to?**  
+**Answer:**
+```bash
+groups username       # List groups for the user
+id username           # Shows UID, GID, and groups
+```
+
+---
+
+## **3. File Permissions and Ownership Questions**
+
+### **Q9: How do you change the ownership of a file?**  
+**Answer:**
+```bash
+sudo chown username:groupname file
+```
+- Changes ownership of the file to a specific user and group.
+
+---
+
+### **Q10: How do you modify file permissions?**  
+**Answer:**
+```bash
+chmod 755 file
+```
+- Sets **rwxr-xr-x** permissions (owner, group, others).
+
+---
+
+## **4. Password and Authentication Questions**
+
+### **Q11: How do you set password expiration policies?**  
+**Answer:**
+```bash
+sudo chage -l username         # View password aging
+sudo chage -M 30 username      # Set password expiry to 30 days
+sudo chage -E 2024-12-31 username  # Expire account on a specific date
+```
+
+---
+
+### **Q12: How do you force a user to change their password on the next login?**  
+**Answer:**
+```bash
+sudo passwd -e username
+```
+- Expires the password immediately, forcing the user to reset it.
+
+---
+
+### **Q13: How do you disable a user’s login shell?**  
+**Answer:**
+```bash
+sudo usermod -s /usr/sbin/nologin username
+```
+- Prevents the user from logging in interactively.
+
+---
+
+## **5. Advanced Questions**
+
+### **Q14: What is the difference between `useradd` and `adduser`?**  
+**Answer:**
+- `useradd`: Low-level command, requires manual options for home directory and shell.  
+- `adduser`: High-level command, interactive prompts for home directory, password, and shell (available in Debian-based systems).
+
+---
+
+### **Q15: How do you find all the files owned by a specific user?**  
+**Answer:**
+```bash
+find / -user username
+```
+- Searches for files owned by the user starting from the root directory (`/`).
+
+---
+
+### **Q16: How do you switch users in Linux?**  
+**Answer:**
+```bash
+su - username
+```
+- Switches to the specified user account with their environment settings.
+
+---
+
+### **Q17: How do you view all logged-in users?**  
+**Answer:**
+```bash
+who
+w
+```
+- `who`: Displays currently logged-in users.  
+- `w`: Shows active users and processes.
+
+---
+
+### **Q18: What happens when a user logs in?**  
+**Answer:**
+1. The username and password are verified against `/etc/passwd` and `/etc/shadow`.  
+2. If valid, a shell session starts with settings from:
+   - `/etc/profile` (system-wide settings).  
+   - `~/.bash_profile` or `~/.bashrc` (user-specific).  
+3. The user's UID and GID are used to enforce permissions.  
+
+---
+
+### **Q19: How do you create a system user (no home directory)?**  
+**Answer:**
+```bash
+sudo useradd -r -s /usr/sbin/nologin username
+```
+- `-r`: Creates a system account.  
+- `-s`: Prevents interactive login.
+
+---
+
+### **Q20: How do you backup and restore user accounts?**  
+**Answer:**
+
+**Backup:**
+```bash
+cp /etc/passwd /backup/passwd.bak
+cp /etc/shadow /backup/shadow.bak
+cp /etc/group /backup/group.bak
+cp /etc/gshadow /backup/gshadow.bak
+```
+
+**Restore:**
+```bash
+cp /backup/passwd.bak /etc/passwd
+cp /backup/shadow.bak /etc/shadow
+cp /backup/group.bak /etc/group
+cp /backup/gshadow.bak /etc/gshadow
+```
+
+---
+
+These are the most frequently asked questions. Let me know if you'd like further explanations!
+
+
 In Linux, **permissions** control who can **read**, **write**, and **execute** files or directories. Here's a **complete explanation** of Linux **file permissions**, related **commands**, and the **backend processes** when these commands are executed.
 
 ---
